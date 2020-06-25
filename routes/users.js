@@ -10,7 +10,7 @@ router.get('/users/signin',(req, res)=>{
 });
 
 router.post('/users/signin', passport.authenticate('local',{
-    successRedirect: '/notes',
+    successRedirect: '/contacts',
     failureRedirect: '/users/signin',
     failureFlash: true
 }));
@@ -23,22 +23,22 @@ router.post('/users/signup', async (req, res)=>{
     const {name, email, password, confirm_password} = req.body;
     let errors= [];
     if (name.length <= 0){ 
-        errors.push({text: 'Please write your name'});
+        errors.push({text: 'Por favor ingrese su nombre'});
     }
     if (email.length <= 0){ 
-        errors.push({text: 'Please write your email'});
+        errors.push({text: 'Por favor ingrese un correo electrónico'});
     }
     if (password != confirm_password){ 
-        errors.push({text: 'Password do not match'});
+        errors.push({text: 'Las contraseñas no coinciden'});
     }
     if (password.length < 4){ 
-        errors.push({text: 'Password must be at least 4 characters'});
+        errors.push({text: 'La contraseña debe tener al menos 4 carácteres'});
     }
     const emailUser = await User.findOne({email: email});
     if(emailUser){
         //req.flash('error_msg','The Email is already in use');
         //res.redirect('/users/signup');
-        errors.push({text: 'The Email is already in use'});
+        errors.push({text: 'El correo electrónico ingresado ya se encuentra en uso'});
     }
     if (errors.length > 0){ 
         res.render('users/signup',{errors, name, email, password, confirm_password});
@@ -46,7 +46,7 @@ router.post('/users/signup', async (req, res)=>{
         const newUser = new User({name, email, password});
         newUser.password =  await newUser.encryptPassword(password);
         await newUser.save();
-        req.flash('success_msg','You are registered');
+        req.flash('success_msg','Registrado correctamente');
         res.redirect('/users/signin');
     }
     

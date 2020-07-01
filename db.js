@@ -7,4 +7,4 @@ mongoose.connect('mongodb://localhost/notes-db',{
     useUnifiedTopology: true
 })
     .then(db => console.log('DB is connected'))
-    .catch(er => console.error(err));
+    .catch(err => console.error(err));
